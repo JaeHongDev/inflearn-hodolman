@@ -25,10 +25,10 @@ class PostControllerTest {
     @DisplayName("/posts 요청시 hello가 응답됩니다")
     void test_hello() throws Exception {
         final var body = """
-                {
+              {
                     "title":"제목",
                     "content":"내용입니다."
-                }
+               }
                 """;
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -51,6 +51,6 @@ class PostControllerTest {
                         .content(body))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("제목이 필요합니다."));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.validation.title").value("제목이 필요합니다."));
     }
 }
