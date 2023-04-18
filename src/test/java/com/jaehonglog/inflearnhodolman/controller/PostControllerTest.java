@@ -39,12 +39,12 @@ class PostControllerTest {
                     "content":"내용입니다."
                }
                 """;
+        String body1 = "{\"title\":\"제목\", \"content\":\"내용입니다\"}";
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("{}"));
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
     @Test
     @DisplayName("/posts 요청시 title값은 필수다.")

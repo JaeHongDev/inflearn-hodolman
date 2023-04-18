@@ -18,7 +18,7 @@ public class GlobalControllerAdvice {
         final var field = fieldError.getField();
         final var message = fieldError.getDefaultMessage();
 
-        final var errorResponse=new ErrorResponse("400", "잘못된 요청입니다.");
+        final var errorResponse = ErrorResponse.builder().code("400").message("잘못된 요청입니다.").build();
         errorResponse.addValidation(field, message);
         return errorResponse;
     }

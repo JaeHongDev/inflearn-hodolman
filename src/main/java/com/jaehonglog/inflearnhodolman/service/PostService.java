@@ -16,7 +16,10 @@ public class PostService {
 
     @Transactional()
     public void write(PostCreate postCreate){
-        final var posts = new Posts(postCreate.getTitle(), postCreate.getContent());
+        final var posts = Posts.newPost()
+                .content(postCreate.getContent())
+                .title(postCreate.getTitle())
+                .generate();
         postRepository.save(posts);
     }
 }
