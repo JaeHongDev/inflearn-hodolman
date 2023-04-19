@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getAll(){
-        return postService.getAll();
+    public List<PostResponse> getAll(Pageable pageable){
+        return postService.getAll(pageable);
     }
 }

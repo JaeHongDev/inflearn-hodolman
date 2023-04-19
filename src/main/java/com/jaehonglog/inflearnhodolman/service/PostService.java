@@ -8,6 +8,7 @@ import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import jakarta.transaction.TransactionScoped;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getAll() {
-        return this.postRepository.findAll().stream().map(PostResponse::of).toList();
+    public List<PostResponse> getAll(Pageable pageable) {
+        return this.postRepository.findAll(pageable).stream().map(PostResponse::of).toList();
     }
 }

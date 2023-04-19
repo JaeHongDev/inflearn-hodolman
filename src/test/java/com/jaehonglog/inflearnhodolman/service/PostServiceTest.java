@@ -1,9 +1,12 @@
 package com.jaehonglog.inflearnhodolman.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
+import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.hibernate.event.spi.PostCollectionRecreateEvent;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,7 +15,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 
 @SpringBootTest
@@ -58,10 +64,13 @@ class PostServiceTest {
 
     @Test
     void 게시글_전체조회_테스트(){
-        postService.write(PostCreate.builder().title("title").content("content").build());
-        postService.write(PostCreate.builder().title("title").content("content").build());
-
-        Assertions.assertThat(postService.getAll().size()).isEqualTo(2);
+        final var list = IntStream.range(1,31).mapToObj(i -> Posts.newPost()
+                .title("게시글 " + i)
+                .content("내용 "+ i)
+                .generate()).toList();
+        postRepository.saveAll(list);
+        final var pageable = Pageable.ofSize(5).withPage(1);
+        Assertions.assertThat(postService.getAll(pageable).size()).isEqualTo(5);
     }
 
 }
