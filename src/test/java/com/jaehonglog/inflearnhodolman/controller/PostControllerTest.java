@@ -98,9 +98,7 @@ class PostControllerTest {
 
         var title = "제목입니다.";
         var content = "내용입니다.";
-        postService.write(PostCreate.builder()
-                .title(title)
-                .content(content).build());
+        this.createPost(title, content);
 
         final var id = postRepository.findAll().get(0).getId();
 
@@ -110,6 +108,26 @@ class PostControllerTest {
                 .andExpectAll(
                             jsonPath("$.content").value(content),
                             jsonPath("$.title").value(title)
+                );
+    }
+
+    private void createPost(String title, String content) {
+        postService.write(PostCreate.builder()
+                .title(title)
+                .content(content).build());
+    }
+
+    @Test
+    void test5() throws Exception{
+        this.createPost("1234567890123456","content");
+
+        final var id = postRepository.findAll().get(0).getId();
+        mockMvc.perform(get("/posts/"+ id))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpectAll(
+                        jsonPath("$.content").value("content"),
+                        jsonPath("$.title").value("1234567890")
                 );
     }
 

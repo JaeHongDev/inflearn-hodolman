@@ -4,6 +4,7 @@ package com.jaehonglog.inflearnhodolman.service;
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import jakarta.transaction.TransactionScoped;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,12 @@ public class PostService {
     }
 
     @Transactional
-    public Posts get(Long id){
-        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 id입니다."));
+    public PostResponse get(Long id){
+        final var post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 id입니다."));
+        return PostResponse.builder()
+                .id(post.getId())
+                .content(post.getContent())
+                .title(post.getTitle())
+                .build();
     }
 }

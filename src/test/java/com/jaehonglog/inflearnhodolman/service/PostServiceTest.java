@@ -52,8 +52,8 @@ class PostServiceTest {
         final var post = postService.get(1L);
 
         assertAll(
-                () ->Assertions.assertThat(post.getTitle()).isEqualTo("제목입니다."),
-                () -> Assertions.assertThat(post.getContent()).isEqualTo("내용입니다."));
+                () ->Assertions.assertThat(post.title()).isEqualTo("제목입니다."),
+                () -> Assertions.assertThat(post.content()).isEqualTo("내용입니다."));
     }
 
 }

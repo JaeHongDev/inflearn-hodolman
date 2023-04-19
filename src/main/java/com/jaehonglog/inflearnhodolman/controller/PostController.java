@@ -3,6 +3,7 @@ package com.jaehonglog.inflearnhodolman.controller;
 
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import com.jaehonglog.inflearnhodolman.service.PostService;
 import jakarta.validation.Valid;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public Posts get(@PathVariable("id") Long id){
+    public PostResponse get(@PathVariable("id") Long id){
         return postService.get(id);
     }
 }
