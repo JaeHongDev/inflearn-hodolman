@@ -13,13 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-
-    @Transactional()
+    @Transactional
     public void write(PostCreate postCreate){
         final var posts = Posts.newPost()
                 .content(postCreate.getContent())
                 .title(postCreate.getTitle())
                 .generate();
         postRepository.save(posts);
+    }
+
+    @Transactional
+    public Posts get(Long id){
+        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 id입니다."));
     }
 }
