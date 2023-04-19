@@ -6,6 +6,7 @@ import com.jaehonglog.inflearnhodolman.request.PostCreate;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import com.jaehonglog.inflearnhodolman.service.PostService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -29,5 +31,10 @@ public class PostController {
     @GetMapping("/posts/{id}")
     public PostResponse get(@PathVariable("id") Long id){
         return postService.get(id);
+    }
+
+    @GetMapping("/posts")
+    public List<PostResponse> getAll(){
+        return postService.getAll();
     }
 }

@@ -56,4 +56,12 @@ class PostServiceTest {
                 () -> Assertions.assertThat(post.content()).isEqualTo("내용입니다."));
     }
 
+    @Test
+    void 게시글_전체조회_테스트(){
+        postService.write(PostCreate.builder().title("title").content("content").build());
+        postService.write(PostCreate.builder().title("title").content("content").build());
+
+        Assertions.assertThat(postService.getAll().size()).isEqualTo(2);
+    }
+
 }

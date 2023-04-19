@@ -7,9 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
 import com.jaehonglog.inflearnhodolman.service.PostService;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -131,5 +133,28 @@ class PostControllerTest {
                 );
     }
 
+    @Test
+    void test6() throws Exception{
+        final var post1 = Posts.newPost()
+                .title("title_1")
+                .content("content_1")
+                .generate();
+        final var post2 = Posts.newPost()
+                .title("title_2")
+                .content("content_2")
+                .generate();
+        postRepository.saveAll(List.of(post1, post2));
+
+        mockMvc.perform(get("/posts"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpectAll(
+                        jsonPath("$.size()").value(2),
+                        jsonPath("$.[0].id").value(post1.getId()),
+                        jsonPath("$.[0].title").value(post1.getTitle()),
+                        jsonPath("$.[0].content").value(post1.getContent())
+                );
+
+    }
 
 }

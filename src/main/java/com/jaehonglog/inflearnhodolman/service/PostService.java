@@ -6,6 +6,7 @@ import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import jakarta.transaction.TransactionScoped;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,5 +32,9 @@ public class PostService {
                 .content(post.getContent())
                 .title(post.getTitle())
                 .build();
+    }
+
+    public List<PostResponse> getAll() {
+        return this.postRepository.findAll().stream().map(PostResponse::of).toList();
     }
 }
