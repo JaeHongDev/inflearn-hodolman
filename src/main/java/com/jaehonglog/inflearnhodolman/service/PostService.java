@@ -4,6 +4,7 @@ package com.jaehonglog.inflearnhodolman.service;
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostSearch;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import jakarta.transaction.TransactionScoped;
 import java.util.List;
@@ -35,7 +36,9 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getAll(Pageable pageable) {
-        return this.postRepository.findAll(pageable).stream().map(PostResponse::of).toList();
+    public List<PostResponse> getAll(PostSearch postSearch) {
+        return this.postRepository.getList(postSearch)
+                .stream().map(PostResponse::of)
+                .toList();
     }
 }

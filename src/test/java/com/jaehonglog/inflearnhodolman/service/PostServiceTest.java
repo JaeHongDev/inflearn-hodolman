@@ -6,6 +6,8 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostSearch;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.hibernate.event.spi.PostCollectionRecreateEvent;
@@ -69,8 +71,8 @@ class PostServiceTest {
                 .content("내용 "+ i)
                 .generate()).toList();
         postRepository.saveAll(list);
-        final var pageable = Pageable.ofSize(5).withPage(1);
-        Assertions.assertThat(postService.getAll(pageable).size()).isEqualTo(5);
+        final var postSearch = new PostSearch(1, 10);
+        Assertions.assertThat(postService.getAll(postSearch).size()).isEqualTo(10);
     }
 
 }

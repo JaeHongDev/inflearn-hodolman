@@ -12,6 +12,7 @@ import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
 import com.jaehonglog.inflearnhodolman.service.PostService;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -155,6 +156,21 @@ class PostControllerTest {
                         jsonPath("$.[0].content").value(post1.getContent())
                 );
 
+    }
+
+    @Test
+    void 게시글_페이지네이션_테스트 () throws Exception {
+        var entities = IntStream.range(1, 11).mapToObj((i) -> Posts.newPost()
+                .content("content"+i)
+                .title("title"+i)
+                .generate()).toList();
+        this.postRepository.saveAll(entities);
+        mockMvc.perform(get("/posts?page=1"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.size()").value(10)
+                );
     }
 
 }

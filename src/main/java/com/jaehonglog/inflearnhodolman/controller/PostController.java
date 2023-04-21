@@ -3,6 +3,7 @@ package com.jaehonglog.inflearnhodolman.controller;
 
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostSearch;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import com.jaehonglog.inflearnhodolman.service.PostService;
 import jakarta.validation.Valid;
@@ -12,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +38,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getAll(Pageable pageable){
-        return postService.getAll(pageable);
+    public List<PostResponse> getAll(@ModelAttribute PostSearch postSearch){
+        return postService.getAll(postSearch);
     }
 }
