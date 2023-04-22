@@ -3,6 +3,7 @@ package com.jaehonglog.inflearnhodolman.controller;
 
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostEdit;
 import com.jaehonglog.inflearnhodolman.request.PostSearch;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import com.jaehonglog.inflearnhodolman.service.PostService;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,4 +43,10 @@ public class PostController {
     public List<PostResponse> getAll(@ModelAttribute PostSearch postSearch){
         return postService.getAll(postSearch);
     }
+
+    @PatchMapping("/post/{id}")
+    public void edit(@PathVariable Long id, @RequestBody @Valid PostEdit postEdit){
+        postService.edit(id, postEdit);
+    }
+
 }

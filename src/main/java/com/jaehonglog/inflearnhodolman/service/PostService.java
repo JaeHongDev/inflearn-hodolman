@@ -1,9 +1,11 @@
 package com.jaehonglog.inflearnhodolman.service;
 
 
+import com.jaehonglog.inflearnhodolman.entity.PostEditor;
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostEdit;
 import com.jaehonglog.inflearnhodolman.request.PostSearch;
 import com.jaehonglog.inflearnhodolman.response.PostResponse;
 import jakarta.transaction.TransactionScoped;
@@ -41,4 +43,17 @@ public class PostService {
                 .stream().map(PostResponse::of)
                 .toList();
     }
+
+    @Transactional
+    public void edit(Long id, PostEdit postEdit){
+        var post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+        var postEditor = post.toEditor()
+                .title(postEdit.title())
+                .content(postEdit.content())
+                .build();
+
+        post.edit(postEditor);
+    }
+
 }

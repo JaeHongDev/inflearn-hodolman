@@ -6,6 +6,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 import com.jaehonglog.inflearnhodolman.entity.Posts;
 import com.jaehonglog.inflearnhodolman.repository.PostRepository;
 import com.jaehonglog.inflearnhodolman.request.PostCreate;
+import com.jaehonglog.inflearnhodolman.request.PostEdit;
 import com.jaehonglog.inflearnhodolman.request.PostSearch;
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -73,6 +74,56 @@ class PostServiceTest {
         postRepository.saveAll(list);
         final var postSearch = new PostSearch(1, 10);
         Assertions.assertThat(postService.getAll(postSearch).size()).isEqualTo(10);
+    }
+
+    @Test
+    void 게시글_제목_수정(){
+        var post = Posts.newPost()
+                .title("호돌맨")
+                .content("반포자이")
+                .generate();
+
+        postRepository.save(post);
+        var postEdit = PostEdit.builder()
+                .title("호돌걸")
+                .build();
+        postService.edit(post.getId(), postEdit);
+
+
+        postRepository.findById(post.getId());
+
+
+        var editedPost = postRepository.findById(post.getId())
+                .orElseThrow(()-> new RuntimeException("잘못된 id입니다"+ post.getId()));
+
+        Assertions.assertThat(editedPost.getTitle()).isEqualTo("호돌걸");
+        Assertions.assertThat(editedPost.getContent()).isEqualTo(null);
+    }
+
+    @Test
+    void 게시글_내용_수정(){
+        var post = Posts.newPost()
+                .title("호돌맨")
+                .content("반포자이")
+                .generate();
+
+        postRepository.save(post);
+        var postEdit = PostEdit.builder()
+                .title("호돌걸")
+                .content("초가집")
+                .build();
+        postService.edit(post.getId(), postEdit);
+
+
+        postRepository.findById(post.getId());
+
+
+        var editedPost = postRepository.findById(post.getId())
+                .orElseThrow(()-> new RuntimeException("잘못된 id입니다"+ post.getId()));
+
+        Assertions.assertThat(editedPost.getTitle()).isEqualTo("호돌걸");
+        Assertions.assertThat(editedPost.getContent()).isEqualTo("초가집");
+        Assertions.assertThat(editedPost.getContent()).isEqualTo(null);
     }
 
 }

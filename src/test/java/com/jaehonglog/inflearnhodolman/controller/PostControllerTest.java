@@ -1,8 +1,10 @@
 package com.jaehonglog.inflearnhodolman.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.PATH;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,6 +15,7 @@ import com.jaehonglog.inflearnhodolman.request.PostCreate;
 import com.jaehonglog.inflearnhodolman.service.PostService;
 import java.util.List;
 import java.util.stream.IntStream;
+import javax.sound.midi.Patch;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -109,8 +112,8 @@ class PostControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpectAll(
-                            jsonPath("$.content").value(content),
-                            jsonPath("$.title").value(title)
+                        jsonPath("$.content").value(content),
+                        jsonPath("$.title").value(title)
                 );
     }
 
@@ -170,6 +173,42 @@ class PostControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         jsonPath("$.size()").value(10)
+                );
+    }
+
+    @Test
+    void 게시글_페이지네이션_마이너스_페이지_처리 () throws Exception {
+        var entities = IntStream.range(1, 11).mapToObj((i) -> Posts.newPost()
+                .content("content"+i)
+                .title("title"+i)
+                .generate()).toList();
+        this.postRepository.saveAll(entities);
+        mockMvc.perform(get("/posts?page=2"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.size()").value(10)
+                );
+    }
+    @Test
+    void 게시글_수정() throws Exception {
+        final var post1 = Posts.newPost()
+                .title("title_1")
+                .content("content_1")
+                .generate();
+        var request = """
+        {
+            "title":"title1",
+                "content":"content1"
+        }
+        """;
+        postRepository.save(post1);
+        mockMvc.perform(patch("/post/{postId}", post1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk()
                 );
     }
 
