@@ -13,6 +13,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,6 +48,11 @@ public class PostController {
     @PatchMapping("/post/{id}")
     public void edit(@PathVariable Long id, @RequestBody @Valid PostEdit postEdit){
         postService.edit(id, postEdit);
+    }
+
+    @DeleteMapping("/post/{id}")
+    public void delete(@PathVariable Long id){
+        postService.delete(id);
     }
 
 }

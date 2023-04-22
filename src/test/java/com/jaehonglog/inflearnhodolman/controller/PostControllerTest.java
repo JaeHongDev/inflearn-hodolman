@@ -3,6 +3,7 @@ package com.jaehonglog.inflearnhodolman.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.PATH;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -210,6 +211,25 @@ class PostControllerTest {
                 .andExpectAll(
                         status().isOk()
                 );
+    }
+
+    @Test
+    void 게시글_삭제() throws Exception {
+        final var post1 = Posts.newPost()
+                .title("title_1")
+                .content("content_1")
+                .generate();
+        postRepository.save(post1);
+        mockMvc.perform(delete("/post/{postId}", post1.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Assertions.assertThat(postRepository.count()).isEqualTo(0);
+
+
     }
 
 }
